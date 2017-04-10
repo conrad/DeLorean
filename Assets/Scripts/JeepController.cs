@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
+public class JeepController : MonoBehaviour {
 
 	public WheelCollider wheelFL;
 	public WheelCollider wheelFR;
@@ -99,8 +99,6 @@ public class PlayerController : MonoBehaviour {
 
 	void Steer()
 	{
-		Debug.Log("right: " + isTurningRight + " left: " + isTurningLeft);
-
 		if (IsBackingUp()) {
 			wheelFR.steerAngle = 10;
 			wheelFL.steerAngle = 10;
