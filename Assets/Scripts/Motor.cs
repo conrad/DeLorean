@@ -10,12 +10,29 @@ public class Motor : MonoBehaviour
 	 * Make sure wheels are in the order of:
 	 * front left
 	 * front right
-	 * rear left 
-	 * rear right
+	 * back left 
+	 * back right
 	 */
 	public Wheel[] wheel;
+	public Transform centerOfMass;
 	public float enginePower;
 	public float turnPower;
+
+	Rigidbody rbody;
+
+
+
+	void Awake()
+	{
+		rbody = GetComponent<Rigidbody>();
+	}
+
+
+
+	void Start()
+	{
+		rbody.centerOfMass = centerOfMass.localPosition;
+	}
 
 
 

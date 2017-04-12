@@ -6,13 +6,14 @@ using UnityEngine;
 [RequireComponent(typeof(WheelCollider))]
 public class Wheel : MonoBehaviour 
 {
-	WheelCollider wc;
-
+	public WheelCollider wc;
+//	public GameObject tire;
 
 
 	void Awake()
 	{
 		wc = GetComponent<WheelCollider>();
+		wc.ConfigureVehicleSubsteps(5f, 12, 15);
 	}
 
 
