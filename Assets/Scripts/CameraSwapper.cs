@@ -25,7 +25,6 @@ public class CameraSwapper : MonoBehaviour
 
 
 
-
 	void ActivateTopCamera()
 	{
 		topCamera.SetActive(true);
