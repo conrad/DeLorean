@@ -5,6 +5,7 @@ using UnityEngine;
 public class Flight : MonoBehaviour 
 {
 	public float airBorneHeight;
+	public float rotationFactor;
 
 	private Gyroscope gyro;
 
@@ -51,21 +52,16 @@ public class Flight : MonoBehaviour
 		
 
 
-	// The Gyroscope is right-handed.  Unity is left handed.
 	void GyroRotate()
 	{
-		transform.Rotate(GyroToUnity(Input.gyro.rotationRate));
+		transform.Rotate(GyroToUnity(Input.gyro.rotationRate, rotationFactor));
 	}
 
 
-	private static Vector3 GyroToUnity(Vector3 v)
+
+	// The Gyroscope is right-handed.  Unity is left handed.
+	private static Vector3 GyroToUnity(Vector3 v, float rotationFactor = 1f)
 	{
-		return new Vector3(-v.x, -v.y, v.z);
+		return new Vector3(-v.x * rotationFactor, -v.y * rotationFactor, v.z * rotationFactor);
 	}
-
-
-//	private static Quaternion GyroToUnity(Quaternion q)
-//	{
-//		return new Quaternion(q.x, q.y, -q.z, -q.w);
-//	}
 }
