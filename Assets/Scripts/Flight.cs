@@ -8,11 +8,15 @@ public class Flight : MonoBehaviour
 	public float rotationFactor;
 
 	private Gyroscope gyro;
+	private FlightChecker flightChecker;
 
 
 
 	void Start()
 	{
+		flightChecker = FlightChecker.Instance;
+		flightChecker.setTarget(transform);
+
 		gyro = Input.gyro;
 		if(!gyro.enabled)
 		{
@@ -24,7 +28,7 @@ public class Flight : MonoBehaviour
 
 	void Update () 
 	{
-		if (IsMobile() && IsAirborne()) {
+		if (IsMobile() && flightChecker.IsAirborne()) {
 			GyroRotate();
 		}
 	}
@@ -38,17 +42,17 @@ public class Flight : MonoBehaviour
 		
 
 
-	bool IsAirborne()
-	{
-		RaycastHit hit;
-		Ray camRay = new Ray(transform.position, Vector3.down);
-
-		if (Physics.Raycast(camRay, out hit, airBorneHeight)) {
-			return false;
-		}
-
-		return true;
-	}
+//	bool IsAirborne()
+//	{
+//		RaycastHit hit;
+//		Ray camRay = new Ray(transform.position, Vector3.down);
+//
+//		if (Physics.Raycast(camRay, out hit, airBorneHeight)) {
+//			return false;
+//		}
+//
+//		return true;
+//	}
 		
 
 

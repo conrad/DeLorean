@@ -6,17 +6,24 @@ public class CameraSwapper : MonoBehaviour
 {
 	public GameObject topCamera;
 	public GameObject rearCamera;
-	public float airBorneHeight;
 
-	// Use this for initialization
+	private FlightChecker flightChecker;
+
+
+
 	void Start () {
+		flightChecker = FlightChecker.Instance;
+		flightChecker.setTarget(transform);
+
 		ActivateTopCamera();
 	}
-	
+
+
+
 	void FixedUpdate () {
 		if (Input.GetButton("Jump")) {
 			ActivateRearCamera();
-		} else if (IsAirborne()) {
+		} else if (flightChecker.IsAirborne()) {
 			ActivateRearCamera();
 		} else {
 			ActivateTopCamera();
@@ -37,19 +44,5 @@ public class CameraSwapper : MonoBehaviour
 	{
 		rearCamera.SetActive(true);
 		topCamera.SetActive(false);
-	}
-
-
-
-	bool IsAirborne()
-	{
-		RaycastHit hit;
-		Ray camRay = new Ray(transform.position, Vector3.down);
-
-		if (Physics.Raycast(camRay, out hit, airBorneHeight)) {
-			return false;
-		}
-
-		return true;
 	}
 }
