@@ -13,7 +13,7 @@ public class CameraSwapper : MonoBehaviour
 
 	void Start () {
 		flightChecker = FlightChecker.Instance;
-		flightChecker.setTarget(transform);
+		flightChecker.SetTarget(transform);
 
 		ActivateTopCamera();
 	}

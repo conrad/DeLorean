@@ -85,6 +85,7 @@
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
      <Compile Include="Assets\Scripts\CameraSwapper.cs" />
      <Compile Include="Assets\Scripts\Flight.cs" />
+     <Compile Include="Assets\Scripts\FlightChecker.cs" />
      <Compile Include="Assets\Scripts\JeepController.cs" />
      <Compile Include="Assets\Scripts\Motor.cs" />
      <Compile Include="Assets\Scripts\SwayBar.cs" />

@@ -15,7 +15,7 @@ public class Flight : MonoBehaviour
 	void Start()
 	{
 		flightChecker = FlightChecker.Instance;
-		flightChecker.setTarget(transform);
+		flightChecker.SetTarget(transform);
 
 		gyro = Input.gyro;
 		if(!gyro.enabled)
@@ -28,6 +28,7 @@ public class Flight : MonoBehaviour
 
 	void Update () 
 	{
+		flightChecker.Update();
 		if (IsMobile() && flightChecker.IsAirborne()) {
 			GyroRotate();
 		}

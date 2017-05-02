@@ -39,24 +39,26 @@ public sealed class FlightChecker
 
 
 
-	public void setTarget(Transform transform)
+	public void SetTarget(Transform transform)
 	{
 		flyerTransform = transform;
-		CycleCheck();
 	}
 
 
 
-	void CycleCheck () 
+	/**
+	 * Call this in only one place: Flight.
+	 */ 
+	public void Update() 
 	{
-			RaycastHit hit;
-			Ray camRay = new Ray(flyerTransform.position, Vector3.down);
+		RaycastHit hit;
+		Ray camRay = new Ray(flyerTransform.position, Vector3.down);
 
-			if (Physics.Raycast(camRay, out hit, airBorneHeight)) {
-				isAirborne = false;
-			} else {
-				isAirborne = true;
-			}
+		if (Physics.Raycast(camRay, out hit, airBorneHeight)) {
+			isAirborne = false;
+		} else {
+			isAirborne = true;
+		}
 	}
 
 
