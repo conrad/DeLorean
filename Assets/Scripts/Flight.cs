@@ -30,6 +30,7 @@ public class Flight : MonoBehaviour
 	{
 		flightChecker.Update();
 		if (flightChecker.IsAirborne()) {
+			Debug.Log("I'm flying!");
 			if (IsMobile()) {
 				GyroRotate();
 			} else {
@@ -42,8 +43,8 @@ public class Flight : MonoBehaviour
 
 	bool IsMobile()
 	{
-		return !(Application.platform == RuntimePlatform.OSXEditor);
-//		return Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
+		return Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
+//		return !(Application.platform == RuntimePlatform.OSXEditor);
 	}
 		
 
@@ -56,7 +57,7 @@ public class Flight : MonoBehaviour
 
 
 	// The Gyroscope is right-handed.  Unity is left handed.
-	private static Vector3 GyroToUnity(Vector3 v, float rotationFactor = 1f)
+	private static Vector3 GyroToUnity(Vector3 v, float rotationFactor = 10f)
 	{
 		return new Vector3(-v.x * rotationFactor, -v.y * rotationFactor, v.z * rotationFactor);
 	}
@@ -65,14 +66,13 @@ public class Flight : MonoBehaviour
 	void KeyRotate()
 	{
 		if (Input.GetKey(KeyCode.UpArrow)) {
-			Debug.Log("hey, I should be tilting up");
-			transform.Rotate(Vector3.up);
+			transform.Rotate(Vector3.left * rotationFactor);
 		} else if (Input.GetKey(KeyCode.DownArrow)) {
-			transform.Rotate(Vector3.down);
+			transform.Rotate(Vector3.right * rotationFactor);
 		} else if (Input.GetKey(KeyCode.RightArrow)) {
-			transform.Rotate(Vector3.right);
+			transform.Rotate(Vector3.up * rotationFactor);
 		} else if (Input.GetKey(KeyCode.LeftArrow)) {
-			transform.Rotate(Vector3.left);
+			transform.Rotate(Vector3.down * rotationFactor);
 		} 
 	}
 }

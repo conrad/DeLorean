@@ -1,11 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/FlightChecker.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Flight.cs">
     <Files>
-      <File FileName="Assets/Scripts/FlightChecker.cs" Line="10" Column="33" />
+      <File FileName="Assets/Scripts/Flight.cs" Line="47" Column="1" />
+      <File FileName="Assets/Scripts/FlightChecker.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Balancer.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CameraSwapper.cs" Line="16" Column="1" />
-      <File FileName="Assets/Scripts/Flight.cs" Line="31" Column="26" />
+      <File FileName="Assets/Scripts/CameraSwapper.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Motor.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CameraFollow.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CameraDrag.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
