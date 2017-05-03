@@ -82,6 +82,7 @@
      <Compile Include="Assets\Imports\Standard Assets\Utility\WaypointCircuit.cs" />
      <Compile Include="Assets\Imports\Standard Assets\Utility\WaypointProgressTracker.cs" />
      <Compile Include="Assets\Scripts\Balancer.cs" />
+     <Compile Include="Assets\Scripts\CameraDrag.cs" />
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
      <Compile Include="Assets\Scripts\CameraSwapper.cs" />
      <Compile Include="Assets\Scripts\Flight.cs" />

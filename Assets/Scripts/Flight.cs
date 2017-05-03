@@ -29,8 +29,12 @@ public class Flight : MonoBehaviour
 	void Update () 
 	{
 		flightChecker.Update();
-		if (IsMobile() && flightChecker.IsAirborne()) {
-			GyroRotate();
+		if (flightChecker.IsAirborne()) {
+			if (IsMobile()) {
+				GyroRotate();
+			} else {
+				KeyRotate();
+			}
 		}
 	}
 
@@ -38,22 +42,9 @@ public class Flight : MonoBehaviour
 
 	bool IsMobile()
 	{
-		return Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
+		return !(Application.platform == RuntimePlatform.OSXEditor);
+//		return Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
 	}
-		
-
-
-//	bool IsAirborne()
-//	{
-//		RaycastHit hit;
-//		Ray camRay = new Ray(transform.position, Vector3.down);
-//
-//		if (Physics.Raycast(camRay, out hit, airBorneHeight)) {
-//			return false;
-//		}
-//
-//		return true;
-//	}
 		
 
 
@@ -68,5 +59,20 @@ public class Flight : MonoBehaviour
 	private static Vector3 GyroToUnity(Vector3 v, float rotationFactor = 1f)
 	{
 		return new Vector3(-v.x * rotationFactor, -v.y * rotationFactor, v.z * rotationFactor);
+	}
+
+
+	void KeyRotate()
+	{
+		if (Input.GetKey(KeyCode.UpArrow)) {
+			Debug.Log("hey, I should be tilting up");
+			transform.Rotate(Vector3.up);
+		} else if (Input.GetKey(KeyCode.DownArrow)) {
+			transform.Rotate(Vector3.down);
+		} else if (Input.GetKey(KeyCode.RightArrow)) {
+			transform.Rotate(Vector3.right);
+		} else if (Input.GetKey(KeyCode.LeftArrow)) {
+			transform.Rotate(Vector3.left);
+		} 
 	}
 }

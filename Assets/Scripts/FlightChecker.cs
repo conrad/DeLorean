@@ -65,7 +65,6 @@ public sealed class FlightChecker
 
 	public bool IsAirborne()
 	{
-		Debug.Log(isAirborne);
 		return isAirborne;
 	}
 }
