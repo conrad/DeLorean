@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{E390F8B0-5B5E-7D46-FA61-627C3D3384D7}</ProjectGuid>
+    <ProjectGuid>{4B74B4AC-C0E7-B6EA-9F4D-82ADB9CCC05D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -87,6 +87,8 @@
      <Compile Include="Assets\Scripts\CameraSwapper.cs" />
      <Compile Include="Assets\Scripts\Flight.cs" />
      <Compile Include="Assets\Scripts\FlightChecker.cs" />
+     <Compile Include="Assets\Scripts\GameStarter.cs" />
+     <Compile Include="Assets\Scripts\HeightMeterController.cs" />
      <Compile Include="Assets\Scripts\JeepController.cs" />
      <Compile Include="Assets\Scripts\Motor.cs" />
      <Compile Include="Assets\Scripts\SwayBar.cs" />

@@ -24,6 +24,7 @@ public class Motor : MonoBehaviour
 	private float reverseDirection;
 
 
+
 	void Awake()
 	{
 		rbody = GetComponent<Rigidbody>();
@@ -38,19 +39,10 @@ public class Motor : MonoBehaviour
 
 
 
-//	void FixedUpdate()
-//	{
-//		float torque = enginePower * Input.GetAxis("Vertical");
-//		float turnSpeed = turnPower * Input.GetAxis("Horizontal");
-//
-//		// front wheel drive
-//		wheel[0].Move(torque);
-//		wheel[1].Move(torque);
-//
-//		// front wheel steering 
-//		wheel[0].Turn(turnSpeed);
-//		wheel[1].Turn(turnSpeed);
-//	}
+	public void SetEnginePower (float newEnginePower)
+	{
+		enginePower = newEnginePower;
+	}
 
 
 

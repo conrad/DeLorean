@@ -8,12 +8,13 @@ using UnityEngine;
 public sealed class FlightChecker
 {
 	public float airBorneHeight = 1;
+	public float flightHeight   = 10;
 	public Transform flyerTransform;
 
 	private static FlightChecker instance = null;
 	private static readonly object padlock = new object();
-	private bool isAirborne;
-
+	private float height;
+	private float groundHeight = 0.67838f;
 
 
 	FlightChecker() 
@@ -49,22 +50,44 @@ public sealed class FlightChecker
 	/**
 	 * Call this in only one place: Flight.
 	 */ 
-	public void Update() 
+	public void UpdateHeight() 
 	{
 		RaycastHit hit;
 		Ray camRay = new Ray(flyerTransform.position, Vector3.down);
-
-		if (Physics.Raycast(camRay, out hit, airBorneHeight)) {
-			isAirborne = false;
-		} else {
-			isAirborne = true;
-		}
+		Physics.Raycast(camRay, out hit);
+		height = hit.distance;
 	}
 
 
 
+	public float getHeight()
+	{
+		return height;
+	}
+
+
+
+	public float getFlightHeight()
+	{
+		return flightHeight;
+	}
+
+
+	public float getGroundHeight()
+	{
+		return groundHeight;
+	}
+
+
 	public bool IsAirborne()
 	{
-		return isAirborne;
+		return height >= airBorneHeight;
+	}
+
+
+
+	public bool isFlying()
+	{
+		return height >= flightHeight;
 	}
 }

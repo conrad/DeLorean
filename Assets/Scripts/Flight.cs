@@ -28,9 +28,8 @@ public class Flight : MonoBehaviour
 
 	void Update () 
 	{
-		flightChecker.Update();
+		flightChecker.UpdateHeight();
 		if (flightChecker.IsAirborne()) {
-			Debug.Log("I'm flying!");
 			if (IsMobile()) {
 				GyroRotate();
 			} else {
@@ -43,8 +42,8 @@ public class Flight : MonoBehaviour
 
 	bool IsMobile()
 	{
-		return Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
-//		return !(Application.platform == RuntimePlatform.OSXEditor);
+		return !(Application.platform == RuntimePlatform.OSXEditor);
+//		return Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
 	}
 		
 
