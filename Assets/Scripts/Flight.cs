@@ -6,17 +6,18 @@ public class Flight : MonoBehaviour
 {
 	public float airBorneHeight;
 	public float rotationFactor;
+	public float flightSpeed = 40f;
 	public GameObject centerOfMass;
 	public WheelCollider[] wheelColliders;
-	public GameObject wings;
 	public float wingDeployTime = 3f;
+	public GameObject wings;
 
 	private Gyroscope gyro;
 	private FlightChecker flightChecker;
 	private Vector3 foldedWings;
 	private Vector3 deployedWings;
 	private bool areWingsDeployed = false;
-
+	private Rigidbody rb;
 
 
 	void Start()
@@ -24,6 +25,8 @@ public class Flight : MonoBehaviour
 		flightChecker = FlightChecker.Instance;
 		flightChecker.SetTarget(transform);
 		centerOfMass.SetActive(true);
+
+		rb = GetComponent<Rigidbody>();
 
 		foldedWings   = new Vector3(0.1f, 0f, 0.7f);
 		deployedWings = new Vector3(0.1f, 1.5f, 0.7f);
@@ -45,6 +48,7 @@ public class Flight : MonoBehaviour
 		SetRotationControl();
 
 		ManageWings();
+		ManageMovement();
 	}
 
 
@@ -75,7 +79,6 @@ public class Flight : MonoBehaviour
 	bool IsMobile()
 	{
 		return !(Application.platform == RuntimePlatform.OSXEditor);
-//		return Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
 	}
 		
 
@@ -130,22 +133,15 @@ public class Flight : MonoBehaviour
 			wings.transform.localScale = Vector3.Lerp(start, end, t);
 			yield return null;
 		}
-
 	}
 
+	void ManageMovement() 
+	{
+		if (flightChecker.IsFlying()) {
+			rb.useGravity = false;
+			rb.velocity = transform.forward * flightSpeed;
+		} else {
+			rb.useGravity = true;
+		}
+	}
 }
-
-//
-//public void DoScale(Vector3 start, Vector3 end, float totalTime) {
-//	StartCoroutine(CR_DoScale(start, end, totalTime));
-//}
-//IEnumerator CR_DoScale(Vector3 start, Vector3 end, float totalTime) {
-//	float t = 0;
-//	do {
-//		gameObject.transform.localscale = Vector3.Lerp(start, end, t / totalTime);
-//		yield return null;
-//		t += Time.deltaTime;
-//	} while (t < totalTime)
-//		gameObject.transform.localscale = end;
-//	yield break;
-//}
