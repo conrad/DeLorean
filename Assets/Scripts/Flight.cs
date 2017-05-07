@@ -6,9 +6,16 @@ public class Flight : MonoBehaviour
 {
 	public float airBorneHeight;
 	public float rotationFactor;
+	public GameObject centerOfMass;
+	public WheelCollider[] wheelColliders;
+	public GameObject wings;
+	public float wingDeployTime = 3f;
 
 	private Gyroscope gyro;
 	private FlightChecker flightChecker;
+	private Vector3 foldedWings;
+	private Vector3 deployedWings;
+	private bool areWingsDeployed = false;
 
 
 
@@ -16,6 +23,10 @@ public class Flight : MonoBehaviour
 	{
 		flightChecker = FlightChecker.Instance;
 		flightChecker.SetTarget(transform);
+		centerOfMass.SetActive(true);
+
+		foldedWings   = new Vector3(0.1f, 0f, 0.7f);
+		deployedWings = new Vector3(0.1f, 1.5f, 0.7f);
 
 		gyro = Input.gyro;
 		if(!gyro.enabled)
@@ -28,7 +39,29 @@ public class Flight : MonoBehaviour
 
 	void Update () 
 	{
-		flightChecker.UpdateHeight();
+		flightChecker.UpdateHeight(wheelColliders);
+
+		SetCenterOfMassStatus();
+		SetRotationControl();
+
+		ManageWings();
+	}
+
+
+
+	void SetCenterOfMassStatus()
+	{
+		if (flightChecker.IsLanded()) {
+			centerOfMass.SetActive(true);
+		} else {
+			centerOfMass.SetActive(false);
+		}
+	}
+
+
+
+	void SetRotationControl()
+	{
 		if (flightChecker.IsAirborne()) {
 			if (IsMobile()) {
 				GyroRotate();
@@ -37,7 +70,6 @@ public class Flight : MonoBehaviour
 			}
 		}
 	}
-
 
 
 	bool IsMobile()
@@ -62,6 +94,7 @@ public class Flight : MonoBehaviour
 	}
 
 
+
 	void KeyRotate()
 	{
 		if (Input.GetKey(KeyCode.UpArrow)) {
@@ -74,4 +107,45 @@ public class Flight : MonoBehaviour
 			transform.Rotate(Vector3.down * rotationFactor);
 		} 
 	}
+
+
+
+	void ManageWings()
+	{
+		if (!areWingsDeployed && flightChecker.IsFlying()) {
+			StartCoroutine(ScaleWings(foldedWings, deployedWings, wingDeployTime));
+			areWingsDeployed = true;
+		} else if (areWingsDeployed && !flightChecker.IsFlying()) {
+			StartCoroutine(ScaleWings(deployedWings, foldedWings, wingDeployTime));
+			areWingsDeployed = false;
+		}
+	}
+
+
+
+	IEnumerator ScaleWings(Vector3 start, Vector3 end, float totalTime)
+	{
+		for(float t = 0; t < 1; t += Time.deltaTime / totalTime )
+		{
+			wings.transform.localScale = Vector3.Lerp(start, end, t);
+			yield return null;
+		}
+
+	}
+
 }
+
+//
+//public void DoScale(Vector3 start, Vector3 end, float totalTime) {
+//	StartCoroutine(CR_DoScale(start, end, totalTime));
+//}
+//IEnumerator CR_DoScale(Vector3 start, Vector3 end, float totalTime) {
+//	float t = 0;
+//	do {
+//		gameObject.transform.localscale = Vector3.Lerp(start, end, t / totalTime);
+//		yield return null;
+//		t += Time.deltaTime;
+//	} while (t < totalTime)
+//		gameObject.transform.localscale = end;
+//	yield break;
+//}

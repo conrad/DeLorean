@@ -25,14 +25,13 @@ public class HeightMeterController : MonoBehaviour
 
 
 	void Update () {
-		float normalizedMeterHeight = (flightChecker.getHeight() - flightChecker.getGroundHeight()) / flightChecker.getFlightHeight();
+		float normalizedMeterHeight = (flightChecker.GetHeight() - flightChecker.GetGroundHeight()) / flightChecker.GetFlightHeight();
 		heightMeterSlider.value = normalizedMeterHeight;
 
-		if (flightChecker.isFlying()) {
+		if (flightChecker.IsFlying()) {
 			meterFill.color = flightColor;
 		} else {
 			meterFill.color = initialColor;
 		}
-
 	}
 }
