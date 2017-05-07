@@ -140,6 +140,10 @@ public class Flight : MonoBehaviour
 		if (flightChecker.IsFlying()) {
 			rb.useGravity = false;
 			rb.velocity = transform.forward * flightSpeed;
+//		} else if (flightChecker.IsAirborne()) {
+//			Debug.Log("just airborne");
+//			rb.velocity = (transform.forward * flightSpeed / 2f) + Vector3.down * 2f;
+//			rb.useGravity = true;
 		} else {
 			rb.useGravity = true;
 		}

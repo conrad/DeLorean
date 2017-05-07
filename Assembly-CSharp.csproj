@@ -91,6 +91,7 @@
      <Compile Include="Assets\Scripts\HeightMeterController.cs" />
      <Compile Include="Assets\Scripts\JeepController.cs" />
      <Compile Include="Assets\Scripts\Motor.cs" />
+     <Compile Include="Assets\Scripts\SkidMarks.cs" />
      <Compile Include="Assets\Scripts\SwayBar.cs" />
      <Compile Include="Assets\Scripts\Wheel.cs" />
      <None Include="Assets\Imports\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
