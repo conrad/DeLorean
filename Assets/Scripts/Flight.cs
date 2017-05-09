@@ -11,12 +11,16 @@ public class Flight : MonoBehaviour
 	public WheelCollider[] wheelColliders;
 	public float wingDeployTime = 3f;
 	public GameObject wings;
+	public GameObject leftWingTip;
+	public GameObject rightWingTip;
 
 	private Gyroscope gyro;
 	private FlightChecker flightChecker;
+
 	private Vector3 foldedWings;
 	private Vector3 deployedWings;
 	private bool areWingsDeployed = false;
+	private bool isDeploymentComplete = false;
 	private Rigidbody rb;
 
 
@@ -30,6 +34,8 @@ public class Flight : MonoBehaviour
 
 		foldedWings   = new Vector3(0.1f, 0f, 0.7f);
 		deployedWings = new Vector3(0.1f, 1.5f, 0.7f);
+
+		SetUpWingTrails();
 
 		gyro = Input.gyro;
 		if(!gyro.enabled)
@@ -49,8 +55,9 @@ public class Flight : MonoBehaviour
 
 		ManageWings();
 		ManageMovement();
+		ManageContrails();
 	}
-
+		
 
 
 	void SetCenterOfMassStatus()
@@ -66,9 +73,10 @@ public class Flight : MonoBehaviour
 
 	void SetRotationControl()
 	{
-		if (flightChecker.IsAirborne()) {
+		if (flightChecker.IsAirborne() || flightChecker.IsFlying()) {
 			if (IsMobile()) {
 				GyroRotate();
+				TouchRotate();
 			} else {
 				KeyRotate();
 			}
@@ -85,8 +93,25 @@ public class Flight : MonoBehaviour
 
 	void GyroRotate()
 	{
-		transform.Rotate(GyroToUnity(Input.gyro.rotationRate, rotationFactor));
+		rb.AddTorque(GyroToUnity(Input.gyro.rotationRate, rotationFactor));
+//		transform.Rotate(GyroToUnity(Input.gyro.rotationRate, rotationFactor));
 	}
+
+
+
+	void TouchRotate()
+	{
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+		{
+			// Get movement of the finger since last frame
+			Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
+
+			rb.AddTorque(Camera.main.transform.up * -touchDeltaPosition.x);
+			rb.AddTorque(Camera.main.transform.right * touchDeltaPosition.y);
+		}
+	}
+
+
 
 
 
@@ -113,6 +138,38 @@ public class Flight : MonoBehaviour
 
 
 
+	void SetUpWingTrails()
+	{
+		Material leftTrailMat  = leftWingTip.GetComponent<TrailRenderer>().material;
+		Material rightTrailMat = rightWingTip.GetComponent<TrailRenderer>().material;
+
+		Color32 col = leftTrailMat.GetColor("_Color");
+		col.a = 50;
+		leftTrailMat.SetColor("_Color", col);
+		rightTrailMat.SetColor("_Color", col);
+
+		leftTrailMat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+		leftTrailMat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+		leftTrailMat.SetInt("_ZWrite", 0);
+		leftTrailMat.DisableKeyword("_ALPHATEST_ON");
+		leftTrailMat.EnableKeyword("_ALPHABLEND_ON");
+		leftTrailMat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+		leftTrailMat.renderQueue = 3000;
+
+		rightTrailMat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+		rightTrailMat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+		rightTrailMat.SetInt("_ZWrite", 0);
+		rightTrailMat.DisableKeyword("_ALPHATEST_ON");
+		rightTrailMat.EnableKeyword("_ALPHABLEND_ON");
+		rightTrailMat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+		rightTrailMat.renderQueue = 3000;
+
+		leftWingTip.SetActive(false);
+		rightWingTip.SetActive(false);
+	}
+
+
+
 	void ManageWings()
 	{
 		if (!areWingsDeployed && flightChecker.IsFlying()) {
@@ -128,12 +185,31 @@ public class Flight : MonoBehaviour
 
 	IEnumerator ScaleWings(Vector3 start, Vector3 end, float totalTime)
 	{
+		isDeploymentComplete = false;
+
 		for(float t = 0; t < 1; t += Time.deltaTime / totalTime )
 		{
 			wings.transform.localScale = Vector3.Lerp(start, end, t);
 			yield return null;
 		}
+
+		isDeploymentComplete = true;
 	}
+
+
+
+	void ManageContrails() {
+		if (flightChecker.IsFlying() && isDeploymentComplete) {
+			leftWingTip.SetActive(true);
+			rightWingTip.SetActive(true);
+		} else {
+			leftWingTip.SetActive(false);
+			rightWingTip.SetActive(false);
+		}
+	}
+
+
+
 
 	void ManageMovement() 
 	{

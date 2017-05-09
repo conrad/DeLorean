@@ -105,7 +105,7 @@ public sealed class FlightChecker
 
 	public bool IsFlying()
 	{
-		return height >= flightHeight;
+		return height >= flightHeight || height <= 0f;
 	}
 
 
