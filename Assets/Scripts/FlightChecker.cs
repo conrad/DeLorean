@@ -10,6 +10,7 @@ public sealed class FlightChecker
 	public float airBorneHeight = 1;
 	public float flightHeight   = 10;
 	public Transform flyerTransform;
+	public float shakeStrength = 1f;
 
 	private static FlightChecker instance = null;
 	private static readonly object padlock = new object();
@@ -18,7 +19,7 @@ public sealed class FlightChecker
 	private int timesCheckedOnGround;
 	private int checksForLanding = 20;
 	private bool isLanded;
-
+	private bool isSmashing;
 
 
 	FlightChecker() 
@@ -62,8 +63,17 @@ public sealed class FlightChecker
 		height = hit.distance;
 
 		SetIsLanded(wheelColliders);
+		CheckIsSmashing();
 	}
 
+
+
+	private bool CheckIsSmashing()
+	{
+		isSmashing = (IsFlying() && Input.acceleration.magnitude > shakeStrength) ? true : false;
+
+		return isSmashing;
+	}
 
 
 	private bool AreAllWheelsTouching(WheelCollider[] wheelColliders)
@@ -90,10 +100,12 @@ public sealed class FlightChecker
 	}
 
 
+
 	public float GetGroundHeight()
 	{
 		return groundHeight;
 	}
+
 
 
 	public bool IsAirborne()
@@ -105,7 +117,14 @@ public sealed class FlightChecker
 
 	public bool IsFlying()
 	{
-		return height >= flightHeight || height <= 0f;
+		return !isSmashing && (height >= flightHeight || height <= 0f);
+	}
+
+
+
+	public bool IsSmashing()
+	{
+		return isSmashing;
 	}
 
 
@@ -115,10 +134,12 @@ public sealed class FlightChecker
 		if (IsFlying()) {
 			timesCheckedOnGround = 0;
 			isLanded = false;
+			isSmashing = false;
 			return isLanded;
 		}
 
 		if (isLanded) {
+			isSmashing = false;
 			return isLanded;
 		}
 			
@@ -126,6 +147,7 @@ public sealed class FlightChecker
 			if (timesCheckedOnGround >= checksForLanding) {
 				timesCheckedOnGround = 0;
 				isLanded = true;
+				isSmashing = false;
 			} else {
 				timesCheckedOnGround++;
 			}

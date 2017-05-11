@@ -65,7 +65,9 @@
      <Compile Include="Assets\Scripts\HeightMeterController.cs" />
      <Compile Include="Assets\Scripts\InfiniteTerrainMover.cs" />
      <Compile Include="Assets\Scripts\JeepController.cs" />
+     <Compile Include="Assets\Scripts\LowPassFilter.cs" />
      <Compile Include="Assets\Scripts\Motor.cs" />
+     <Compile Include="Assets\Scripts\ShakeDetector.cs" />
      <Compile Include="Assets\Scripts\SkidMarks.cs" />
      <Compile Include="Assets\Scripts\SpinWithTouch.cs" />
      <Compile Include="Assets\Scripts\SwayBar.cs" />

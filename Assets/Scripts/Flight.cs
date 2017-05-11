@@ -76,7 +76,7 @@ public class Flight : MonoBehaviour
 		if (flightChecker.IsAirborne() || flightChecker.IsFlying()) {
 			if (IsMobile()) {
 				GyroRotate();
-				TouchRotate();
+//				TouchRotate();
 			} else {
 				KeyRotate();
 			}
@@ -93,7 +93,7 @@ public class Flight : MonoBehaviour
 
 	void GyroRotate()
 	{
-		rb.AddTorque(GyroToUnity(Input.gyro.rotationRate, rotationFactor));
+		rb.AddTorque(GyroToUnity(Input.gyro.rotationRate, rotationFactor * rotationFactor));
 //		transform.Rotate(GyroToUnity(Input.gyro.rotationRate, rotationFactor));
 	}
 
@@ -211,17 +211,40 @@ public class Flight : MonoBehaviour
 
 
 
-	void ManageMovement() 
+	void ManageMovement()
 	{
 		if (flightChecker.IsFlying()) {
 			rb.useGravity = false;
 			rb.velocity = transform.forward * flightSpeed;
-//		} else if (flightChecker.IsAirborne()) {
-//			Debug.Log("just airborne");
-//			rb.velocity = (transform.forward * flightSpeed / 2f) + Vector3.down * 2f;
-//			rb.useGravity = true;
+		} else if (flightChecker.IsSmashing()) { 
+			DiveBomb();
+		} else if (flightChecker.IsAirborne()) {
+			Glide();
 		} else {
 			rb.useGravity = true;
 		}
 	}
+
+
+
+	void Glide()
+	{
+		rb.useGravity = false;
+
+		// Gravity
+		rb.velocity -= Vector3.up * Time.deltaTime * 8f;
+
+		rb.velocity += transform.forward * Time.deltaTime * 8f;
+	}
+
+
+
+	void DiveBomb()
+	{
+//		transform.rotation = Vector3.down;
+
+//		rb.velocity += transform.forward * flightSpeed * Time.deltaTime;
+		rb.velocity += Vector3.down * flightSpeed * Time.deltaTime;
+	}
+
 }
