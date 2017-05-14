@@ -24,14 +24,15 @@ public class GenerateInfinite : MonoBehaviour
 {
 	public GameObject plane;
 	public GameObject player;
+	public GameObject asphalt;
 
 	int planeSize = 10;
 	int halfTilesX = 10;
 	int halfTilesZ = 10;
-
 	Vector3 startPos;
-
-	Hashtable tiles = new Hashtable();
+	Hashtable landscapeTiles = new Hashtable();
+	Hashtable roadTiles = new Hashtable();
+	float roadWidth, roadLength;
 
 
 
@@ -40,23 +41,11 @@ public class GenerateInfinite : MonoBehaviour
 		this.gameObject.transform.position = Vector3.zero;
 		startPos = Vector3.zero;
 
-		float updateTime = Time.realtimeSinceStartup;
+		roadWidth = asphalt.GetComponent<MeshRenderer>().bounds.size.x;
+		roadLength = asphalt.GetComponent<MeshRenderer>().bounds.size.y;
 
-		for (int x = -halfTilesX; x < halfTilesX; x++) {
-			for (int z = -halfTilesZ; z < halfTilesZ; z++) {
-				Vector3 pos = new Vector3(
-					              x * planeSize + startPos.x, 
-					              0,
-					              z * planeSize + startPos.z
-				              );
-				GameObject t = (GameObject)Instantiate(plane, pos, Quaternion.identity);
-
-				string tilename = "Tile_" + ((int)pos.x).ToString() + "_" + ((int)pos.z).ToString();
-				t.name = tilename;
-				Tile tile = new Tile(t, updateTime);
-				tiles.Add(tilename, tile);
-			}
-		}
+		GenerateInitialLandscape(Time.realtimeSinceStartup);
+//		GenerateInitialRoads()
 	}
 
 
@@ -72,34 +61,69 @@ public class GenerateInfinite : MonoBehaviour
 			int playerX = (int) (Mathf.Floor(player.transform.position.x / planeSize) * planeSize);
 			int playerZ = (int) (Mathf.Floor(player.transform.position.z / planeSize) * planeSize);
 
-			for (int x = -halfTilesX; x < halfTilesX; x++) {
-				for (int z = -halfTilesZ; z < halfTilesZ; z++) {
-					Vector3 pos = new Vector3(x * planeSize + playerX, 0, z * planeSize + playerZ);
+			UpdateLandscapeFromPlayerLocation(playerX, playerZ, updateTime);
 
-					string tilename = "Tile_" + ((int)pos.x).ToString() + "_" + ((int)pos.z).ToString();
-
-					if (!tiles.ContainsKey(tilename)) {
-						GameObject t = (GameObject) Instantiate(plane, pos, Quaternion.identity);
-						t.name = tilename;
-						Tile tile = new Tile(t, updateTime);
-						tiles.Add(tilename, tile);
-					} else {
-						(tiles[tilename] as Tile).creationTime = updateTime;
-					}
-				}
-			}
-
-			Hashtable newTerrain = new Hashtable();
-			foreach (Tile tls in tiles.Values) {
-				if (tls.creationTime != updateTime) {
-					Destroy(tls.theTile);  	// Delete GameObject.
-				} else {
-					newTerrain.Add(tls.theTile.name, tls);
-				}
-			}
-
-			tiles = newTerrain;
+			landscapeTiles = CreateUpdatedLandscapeCopy(updateTime);
 			startPos = player.transform.position;
 		}
+	}
+
+
+
+	void GenerateInitialLandscape(float updateTime)
+	{
+		for (int x = -halfTilesX; x < halfTilesX; x++) {
+			for (int z = -halfTilesZ; z < halfTilesZ; z++) {
+				Vector3 pos = new Vector3(
+					x * planeSize + startPos.x, 
+					0,
+					z * planeSize + startPos.z
+				);
+				GameObject t = (GameObject) Instantiate(plane, pos, Quaternion.identity);
+
+				string tilename = "Tile_" + ((int)pos.x).ToString() + "_" + ((int)pos.z).ToString();
+				t.name = tilename;
+				Tile tile = new Tile(t, updateTime);
+				landscapeTiles.Add(tilename, tile);
+			}
+		}
+	}
+
+
+
+	void UpdateLandscapeFromPlayerLocation(int playerX, int playerZ, float updateTime)
+	{
+		for (int x = -halfTilesX; x < halfTilesX; x++) {
+			for (int z = -halfTilesZ; z < halfTilesZ; z++) {
+				Vector3 pos = new Vector3(x * planeSize + playerX, 0, z * planeSize + playerZ);
+
+				string tilename = "Tile_" + ((int)pos.x).ToString() + "_" + ((int)pos.z).ToString();
+
+				if (!landscapeTiles.ContainsKey(tilename)) {
+					GameObject t = (GameObject) Instantiate(plane, pos, Quaternion.identity);
+					t.name = tilename;
+					Tile tile = new Tile(t, updateTime);
+					landscapeTiles.Add(tilename, tile);
+				} else {
+					(landscapeTiles[tilename] as Tile).creationTime = updateTime;
+				}
+			}
+		}
+	}
+
+
+
+	Hashtable CreateUpdatedLandscapeCopy(float updateTime)
+	{
+		Hashtable newTerrain = new Hashtable();
+		foreach (Tile tls in landscapeTiles.Values) {
+			if (tls.creationTime != updateTime) {
+				Destroy(tls.theTile);  	// Delete GameObject.
+			} else {
+				newTerrain.Add(tls.theTile.name, tls);
+			}
+		}
+
+		return newTerrain;
 	}
 }
