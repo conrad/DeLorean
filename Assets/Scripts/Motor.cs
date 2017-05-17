@@ -13,21 +13,28 @@ public class Motor : MonoBehaviour
 	 * back left 
 	 * back right
 	 */
-	public Wheel[] wheel;
+	public GameObject[] wheelObject;
 	public Transform centerOfMass;
 	public float enginePower;
 	public float turningFactor;
 
 	Rigidbody rb;
+	private Wheel[] wheel;
 	private bool isTurningRight;
 	private bool isTurningLeft;
 	private float reverseDirection;
-
+	private FlightChecker flightChecker;
 
 
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
+		flightChecker = FlightChecker.Instance;
+		wheel = new Wheel[4];
+		wheel[0] = wheelObject[0].GetComponent<Wheel>();
+		wheel[1] = wheelObject[1].GetComponent<Wheel>();
+		wheel[2] = wheelObject[2].GetComponent<Wheel>();
+		wheel[3] = wheelObject[3].GetComponent<Wheel>();
 	}
 
 
@@ -88,12 +95,16 @@ public class Motor : MonoBehaviour
 
 	void Drive()
 	{
-		if (IsBackingUp()) {
-			MoveBackward();
-			Steer();
-		} else  {
-			MoveForward();
-			Steer();
+		if (!flightChecker.IsDead()) {
+			if (IsBackingUp()) {
+				MoveBackward();
+				Steer();
+			} else {
+				MoveForward();
+				Steer();
+			}
+		} else {
+			Stop();
 		}
 	}
 
@@ -103,6 +114,7 @@ public class Motor : MonoBehaviour
 	{
 		return isTurningRight && isTurningLeft;
 	}
+
 
 
 	void MoveForward() 
@@ -117,6 +129,17 @@ public class Motor : MonoBehaviour
 	{
 		wheel[0].Move(-enginePower);
 		wheel[1].Move(-enginePower);
+	}
+
+
+
+	void Stop()
+	{
+		wheelObject[0].GetComponent<WheelCollider>().motorTorque = 0;
+		wheelObject[1].GetComponent<WheelCollider>().motorTorque = 0;
+		wheelObject[2].GetComponent<WheelCollider>().motorTorque = 0;
+		wheelObject[3].GetComponent<WheelCollider>().motorTorque = 0;
+
 	}
 
 

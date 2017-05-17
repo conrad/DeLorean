@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class Damage : MonoBehaviour 
 {
 	public GameObject smoke;
+	public int smokeLevelDamage = 7;
+	public int deadDamage = 10;
+
 
 	FlightChecker flightChecker;
 	Collider collider;
@@ -12,34 +17,27 @@ public class Damage : MonoBehaviour
 
 
 
+
 	void Start () 
 	{
 		flightChecker = FlightChecker.Instance;
-//		GameObject colliderObject = GameObject.FindGameObjectWithTag("PlayerCollider"); 
-//		collider = colliderObject.GetComponent<BoxCollider>();
 	}
+
 
 
 	void OnCollisionEnter(Collision collision)
 	{
-		Debug.Log("collision data: " + collision.collider);
-
 		if (!flightChecker.IsLanded()) {
+			Debug.Log("damage!!");
 			damage += 1;
-			Debug.Log("Flying Collision: " + damage);
-			if (damage > 3) {
+
+			if (damage > smokeLevelDamage) {
 				smoke.SetActive(true);
+			}
+
+			if (damage > deadDamage) {
+				flightChecker.SetIsDead(true);
 			}
 		}
 	}
-
-
-
-//	void Update () 
-//	{
-//		if (flightChecker.IsFlying()) {
-//			
-//		}
-//			
-//	}
 }

@@ -20,6 +20,8 @@ public sealed class FlightChecker
 	private int checksForLanding = 20;
 	private bool isLanded;
 	private bool isSmashing;
+	private bool isDead;
+
 
 
 	FlightChecker() 
@@ -38,6 +40,7 @@ public sealed class FlightChecker
 				{
 					instance = new FlightChecker();
 				}
+
 				return instance;
 			}
 		}
@@ -129,6 +132,29 @@ public sealed class FlightChecker
 
 
 
+	public bool IsLanded()
+	{
+		return isLanded;
+	}
+
+
+
+	public bool SetIsDead(bool status)
+	{
+		isDead = status;
+
+		return isDead;
+	}
+
+
+
+	public bool IsDead()
+	{
+		return isDead;
+	}
+
+
+
 	private bool SetIsLanded(WheelCollider[] wheelColliders)
 	{
 		if (IsFlying()) {
@@ -153,13 +179,6 @@ public sealed class FlightChecker
 			}
 		}
 
-		return isLanded;
-	}
-
-
-
-	public bool IsLanded()
-	{
 		return isLanded;
 	}
 }
