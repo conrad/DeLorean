@@ -16,7 +16,8 @@ public class HeightMeterController : MonoBehaviour
 
 
 
-	void Start () {
+	void Start () 
+	{
 		flightChecker = FlightChecker.Instance;
 		initialColor = new Color(meterFill.color.r, meterFill.color.g, meterFill.color.b, meterFill.color.a);
 		flightColor = new Color(1f, .01f, .01f);
@@ -24,8 +25,9 @@ public class HeightMeterController : MonoBehaviour
 
 
 
-	void Update () {
-		float normalizedMeterHeight = (flightChecker.GetHeight() - flightChecker.GetGroundHeight()) / flightChecker.GetFlightHeight();
+	void Update () 
+	{
+		float normalizedMeterHeight = .3f / flightChecker.GetFlightHeight()  * (flightChecker.GetHeight() - flightChecker.GetGroundHeight());
 		heightMeterSlider.value = normalizedMeterHeight;
 
 		if (flightChecker.IsFlying()) {

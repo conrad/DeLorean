@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\CameraDrag.cs" />
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
      <Compile Include="Assets\Scripts\CameraSwapper.cs" />
+     <Compile Include="Assets\Scripts\Damage.cs" />
      <Compile Include="Assets\Scripts\Flight.cs" />
      <Compile Include="Assets\Scripts\FlightChecker.cs" />
      <Compile Include="Assets\Scripts\GameStarter.cs" />

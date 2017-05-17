@@ -13,6 +13,7 @@ public class Flight : MonoBehaviour
 	public GameObject wings;
 	public GameObject leftWingTip;
 	public GameObject rightWingTip;
+	public Transform[] wheels;
 
 	private Gyroscope gyro;
 	private FlightChecker flightChecker;
@@ -174,9 +175,11 @@ public class Flight : MonoBehaviour
 	{
 		if (!areWingsDeployed && flightChecker.IsFlying()) {
 			StartCoroutine(ScaleWings(foldedWings, deployedWings, wingDeployTime));
+//			StartCoroutine(RotateWheelsToFlightMode(wingDeployTime));
 			areWingsDeployed = true;
 		} else if (areWingsDeployed && !flightChecker.IsFlying()) {
 			StartCoroutine(ScaleWings(deployedWings, foldedWings, wingDeployTime));
+//			StartCoroutine(RotateWheelsFromFlightMode(wingDeployTime));
 			areWingsDeployed = false;
 		}
 	}
@@ -196,6 +199,59 @@ public class Flight : MonoBehaviour
 		isDeploymentComplete = true;
 	}
 
+
+
+	IEnumerator RotateWheelsToFlightMode(float totalTime)
+	{
+		isDeploymentComplete = false;
+
+		float degreeDelta = 2f / totalTime;
+
+		for(float t = 0; t < 1; t += Time.deltaTime / totalTime )
+		{
+			wheels[0].Rotate(0f, 0f, degreeDelta);
+			wheels[1].Rotate(0f, 0f, -degreeDelta);
+			wheels[2].Rotate(0f, 0f, degreeDelta);
+			wheels[3].Rotate(0f, 0f, -degreeDelta);
+
+			yield return null;
+		}
+
+		wheels[0].rotation = Quaternion.identity;
+		wheels[1].rotation = Quaternion.identity;
+		wheels[2].rotation = Quaternion.identity;
+		wheels[3].rotation = Quaternion.identity;
+
+		isDeploymentComplete = true;
+	}
+
+
+
+	IEnumerator RotateWheelsFromFlightMode(float totalTime)
+	{
+		isDeploymentComplete = false;
+
+		float degreeDelta = 2f / totalTime;
+
+		for(float t = 0; t < 1; t += Time.deltaTime / totalTime )
+		{
+			wheels[0].Rotate(0f, 0f, -degreeDelta);
+			wheels[1].Rotate(0f, 0f, degreeDelta);
+			wheels[2].Rotate(0f, 0f, -degreeDelta);
+			wheels[3].Rotate(0f, 0f, degreeDelta);
+
+			yield return null;
+		}
+
+		wheels[0].rotation = new Quaternion(.5f,.5f,.5f,.5f);
+		wheels[1].rotation = new Quaternion(.5f,.5f,.5f,.5f);
+		wheels[2].rotation = new Quaternion(.5f,.5f,.5f,.5f);
+		wheels[3].rotation = new Quaternion(.5f,.5f,.5f,.5f);
+
+
+		isDeploymentComplete = true;
+
+	}
 
 
 	void ManageContrails() {
