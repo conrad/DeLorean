@@ -6,9 +6,11 @@ using UnityEngine;
 
 public class Damage : MonoBehaviour 
 {
-	public GameObject smoke;
-	public int smokeLevelDamage = 7;
+	public GameObject[] damagedSmoke;
+	public GameObject[] deadSmoke;
+	public int smokeLevelDamage = 5;
 	public int deadDamage = 10;
+	public MeshRenderer carMesh;
 
 
 	FlightChecker flightChecker;
@@ -28,15 +30,23 @@ public class Damage : MonoBehaviour
 	void OnCollisionEnter(Collision collision)
 	{
 		if (!flightChecker.IsLanded()) {
-			Debug.Log("damage!!");
+//			Debug.Log("collision data: " + collision.rigidbody.name);
+			Debug.Log("damage!! " + damage);
 			damage += 1;
 
 			if (damage > smokeLevelDamage) {
-				smoke.SetActive(true);
+				for (int i = 0; i < damagedSmoke.Length; i++) {
+					damagedSmoke[i].SetActive(true);
+				}
 			}
 
 			if (damage > deadDamage) {
 				flightChecker.SetIsDead(true);
+				carMesh.material.color = new Color(0f, 0f, 0f);
+
+				for (int i = 0; i < deadSmoke.Length; i++) {
+					deadSmoke[i].SetActive(true);
+				}
 			}
 		}
 	}

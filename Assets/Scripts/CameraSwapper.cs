@@ -6,6 +6,7 @@ public class CameraSwapper : MonoBehaviour
 {
 	public GameObject topCamera;
 	public GameObject rearCamera;
+	public GameObject closeCamera;
 
 	private FlightChecker flightChecker;
 
@@ -25,6 +26,8 @@ public class CameraSwapper : MonoBehaviour
 			ActivateRearCamera();
 		} else if (flightChecker.IsAirborne()) {
 			ActivateRearCamera();
+		} else if (flightChecker.IsDead()) {
+			ActivateCloseCamera();
 		} else {
 			ActivateTopCamera();
 		}
@@ -36,6 +39,7 @@ public class CameraSwapper : MonoBehaviour
 	{
 		topCamera.SetActive(true);
 		rearCamera.SetActive(false);
+		closeCamera.SetActive(false);
 	}
 
 
@@ -43,6 +47,16 @@ public class CameraSwapper : MonoBehaviour
 	void ActivateRearCamera()
 	{
 		rearCamera.SetActive(true);
+		topCamera.SetActive(false);
+		closeCamera.SetActive(false);
+	}
+
+
+
+	void ActivateCloseCamera() 
+	{
+		closeCamera.SetActive(true);
+		rearCamera.SetActive(false);
 		topCamera.SetActive(false);
 	}
 }
